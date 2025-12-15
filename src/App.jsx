@@ -18,13 +18,13 @@ function App() {
   const developers = [
     { 
       name: "Moses Alvin", 
-      role: "SOFTWARE Engineer", 
+      role: "Software Engineer", 
       linkedin: "https://www.linkedin.com/in/alvin-panjaitan", 
       photo: mosesImg 
     },
     { 
       name: "Justin Christoper", 
-      role: "AI  Engineer", 
+      role: "AI Engineer", 
       linkedin: "https://www.linkedin.com/in/justin-christroper-b48494390/", 
       photo: justinImg 
     },
@@ -73,14 +73,17 @@ function App() {
     const formData = new FormData()
     formData.append('image', image)
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
     try {
-      const response = await axios.post('http://127.0.0.1:5000/analyze', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      const response = await axios.post(
+        `${API_BASE_URL}/analyze`,
+        formData, {
       })
       setResult(response.data.data)
     } catch (err) {
-      console.error(err)
-      setError("Gagal terhubung ke server. Coba lagi!")
+      if (err.response) setError(err.response.data.message || "Server error")
+      else setError("Gagal terhubung ke server. Coba lagi!")
     } finally {
       setLoading(false)
     }
